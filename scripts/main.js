@@ -147,6 +147,7 @@ let view = {
       else {
         controller.buttonLock = false;
         document.querySelector('.result-overlay-text').innerHTML = '';
+        document.querySelector('.result-overlay-text').style.visibility = 'hidden';
       }
     };
     tick();
@@ -173,6 +174,7 @@ let view = {
       overlay.style.backgroundColor = '#D70000';
       overlay.innerHTML = 'INCORRECT';
     }
+    overlay.style.visibility = 'visible';
     this.fadeIn(overlay);
     await this.sleep(1500);
     this.fadeOut(overlay);
