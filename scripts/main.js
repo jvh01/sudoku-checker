@@ -146,6 +146,7 @@ let view = {
       }
       else {
         controller.buttonLock = false;
+        document.querySelector('.result-overlay-text').innerHTML = '';
       }
     };
     tick();
