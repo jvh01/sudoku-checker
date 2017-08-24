@@ -4,6 +4,7 @@ let model = {
   rowsValid: [],
   colsValid: [],
   subgridsValid: [],
+  newTiles: [],
 
   transpose: function(grid) {
     let t = grid[0].map(function(col, i) {
@@ -70,6 +71,16 @@ let model = {
     return ids;
   },
 
+  compareGrids: function(grid1, grid2) {
+    let tileIds = [];
+    for (let n = 0; n < 81; n++) {
+      if (grid1[Math.floor(n/9)][n%9] !== grid2[Math.floor(n/9)][n%9]) {
+        tileIds.push(n);
+      }
+    }
+    this.newTiles = tileIds;
+  },
+
   checkResult: function() {
     return (this.rowsValid.indexOf(false) == -1 &&
             this.colsValid.indexOf(false) == -1 &&
@@ -115,6 +126,26 @@ let view = {
     return tile;
   },
 
+  fadeOutNewTile: function(element) {
+    let opacity = 1;
+
+    let tick = function () {
+      opacity -= 0.01;
+      element.style.backgroundColor = `rgba(255,244,191,${opacity})`;
+      if (opacity > 0) {
+        (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
+          setTimeOut(tick, 16);
+      }
+    };
+    tick();
+  },
+
+  fadeOutNewTiles: function() {
+    for (let tileId of model.newTiles) {
+      this.fadeOutNewTile(document.getElementById(tileId));
+    }
+  },
+
   updateDisplay: function(array) {
     let gridDisplay = document.querySelector('.grid-display');
     gridDisplay.innerHTML = '';
@@ -124,6 +155,7 @@ let view = {
         gridDisplay.appendChild(tile);
       }
     }
+    this.fadeOutNewTiles();
     controller.buttonLock = false;
   },
 
@@ -204,7 +236,6 @@ let controller = {
   buttonLock: false,
 
   init: function() {
-
       const defaultGrid = [
         [5,3,4,6,7,8,9,1,2],
         [6,7,2,1,9,5,3,4,8],
@@ -216,13 +247,11 @@ let controller = {
         [2,8,7,4,1,9,6,3,5],
         [3,4,5,2,8,6,1,7,9]
       ];
-
       document.querySelector('.grid-text-input').value = JSON.stringify(defaultGrid).replace(/],/g,'],\n');
       model.grid = this.strToGrid(document.querySelector('.grid-text-input').value);
       view.updateDisplay(model.grid);
       this.bindUpdate();
       this.bindCheck();
-
   },
 
   strToGrid: function(str) {
@@ -245,7 +274,9 @@ let controller = {
         return;
       }
       controller.buttonLock = true;
-      model.grid = controller.strToGrid(document.querySelector('.grid-text-input').value);
+      let newGrid = controller.strToGrid(document.querySelector('.grid-text-input').value);
+      model.compareGrids(newGrid, model.grid);
+      model.grid = newGrid;
       view.updateDisplay(model.grid);
     });
   },
