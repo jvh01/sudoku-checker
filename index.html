@@ -1,0 +1,40 @@
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles/main.css">
+    <script type="text/javascript" src="scripts/main.js" defer></script>
+    <title>Sudoku Checker</title>
+  </head>
+
+  <body>
+
+    <section class="grid-display-container">
+      <section class="grid-display"></section>
+      <div class="result-overlay">
+        <p class="result-overlay-text">overlay text</p>
+      </div>
+    </section>
+
+    <section class="user-inputs">
+      <div class="grid-input-main">
+        <p>Enter your own sudoku grid</p>
+        <p>Reads up to the first 81 digits in string</p>
+        <p>Zeroes are treated as blank</p>
+        <textarea class="grid-text-input" cols="34" rows="15"></textarea>
+        <div class="btns">
+          <button class="btn-update">Update Grid</button>
+          <button class="btn-check">Check Grid</button>
+          <div class="tooltip">?
+            <span class="tooltiptext">
+              Sudoku solution checker inspired by CodeFights
+              and Jeff Bothe (jmbothe.github)
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </body>
+
+</html>
